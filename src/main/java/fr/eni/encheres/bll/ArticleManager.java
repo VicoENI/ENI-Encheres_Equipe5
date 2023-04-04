@@ -4,9 +4,20 @@ import java.util.List;
 
 public class ArticleManager {
 
+	// Liste des articles gérée par la classe ArticleManager
 	private List<Article> listArticles;
+	
+	// Accès aux données des articles
 	private ArticleDAO daoArticles;
-
+	
+	
+	/**
+	 * Constructor of the ArticleManager class. Initializes the list of articles and the connection to the database.
+	 * 
+	 * @throws BLLException if a business error occurs
+	 * @throws SQLException if a SQL error occurs
+	 * @throws DALException if a data access error occurs
+	 */
 	public ArticleManager() throws BLLException, SQLException, DALException {
 		daoArticles = DAOFactory.getArticleDAO();
 
@@ -17,10 +28,26 @@ public class ArticleManager {
 		}
 	}
 
+	
+	/**
+	 * Retourne la liste des articles gérée par la classe ArticleManager.
+	 * 
+	 * @return la liste des articles
+	 */
 	public List<Article> getListArticles() {
 		return listArticles;
 	}
 
+	
+	/**
+	 * Adds a new article to the list of articles managed by the ArticleManager class.
+	 * 
+	 * @param newArticle the article to add
+	 * @return the position of the article in the list
+	 * @throws BLLException if a business error occurs
+	 * @throws SQLException if a SQL error occurs
+	 * @throws DALException if a data access error occurs
+	 */
 	public int addArticle(Article newArticle) throws BLLException, SQLException, DALException {
 		Article article;
 		try {
@@ -40,7 +67,16 @@ public class ArticleManager {
 		}
 		return listArticles.size() - 1;
 	}
-
+	
+	
+	/**
+	 * Met à jour un article dans la liste d'articles gérée par la classe ArticleManager.
+	 * 
+	 * @param article l'article à mettre à jour
+	 * @throws BLLException si une erreur métier survient
+	 * @throws SQLException si une erreur SQL survient
+	 * @throws DALException si une erreur d'accès aux données survient
+	 */
 	public void updateArticle(Article article) throws BLLException, SQLException, DALException {
 		Article existingArticle;
 		try {
