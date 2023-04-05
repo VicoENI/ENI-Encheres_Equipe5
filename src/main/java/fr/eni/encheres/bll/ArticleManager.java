@@ -123,29 +123,25 @@ public class ArticleManager {
 	 * @param u Utilisateur
 	 * @throws BLLException
 	 */
-	public void validerUser(Utilisateur u) throws BLLException
+	public void validerUser(Article a) throws BLLException
 	{
 		boolean valide = true;
 		StringBuffer sb = new StringBuffer();
 		
-		if(u==null){
-			throw new BLLException("Utilisateur null");
+		if(a==null){
+			throw new BLLException("Article null");
 		}
-		//Les attributs d'un utilisateur sont obligatoires
-		if(u.getNom_article()==null || u.getNom_article().trim().length()==0){
+		//Les attributs d'un article sont obligatoires
+		if(a.getNom_article()==null || a.getNom_article().trim().length()==0){
 			sb.append("Le nom de l'article est obligatoire.\n");
 			valide = false;
 		}
-		if(u.getDescription()==null || u.getDescription().trim().length()==0){
+		if(a.getDescription()==null || a.getDescription().trim().length()==0){
 			sb.append("La description est obligatoire.\n");
 			valide = false;
 		}
-		if(u.getDate_fin_encheres()==null || u.getDate_fin_encheres().trim().length()==0){
-			sb.append("Le nom  est obligatoire.\n");
-			valide = false;
-		}
-		if(u.getPrenom()==null || u.getPrenom().trim().length()==0){
-			sb.append("Le prénom  est obligatoire.\n");
+		if(a.getDate_fin_encheres()==null || a.getDate_fin_encheres().trim().length()==0){
+			sb.append("La date fin enchere est obligatoire.\n");
 			valide = false;
 		}
 		
