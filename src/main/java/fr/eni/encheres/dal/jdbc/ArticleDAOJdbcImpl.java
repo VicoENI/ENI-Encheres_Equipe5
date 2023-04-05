@@ -85,7 +85,7 @@ public class ArticleDAOJdbcImpl {
                 article.setDateDebutEncheres(rs.getDate("date_debut_encheres"));
                 article.setDateFinEncheres(rs.getDate("date_fin_encheres"));
                 article.setPrixInitial(rs.getInt("prix_initial"));
-                
+
                 article.setUtilisateur(rs.getInt("id_utilisateur"));
                 article.setCategorie(rs.getInt("id_categorie"));
                 listOfArticles.add(article);
@@ -156,7 +156,7 @@ public class ArticleDAOJdbcImpl {
     }
 
     @Override
-    public void updateArticle(Article article) throws DALException {
+    public void updateArticleById(int idArticle) throws DALException {
         try (Connection con = ConnectionProvider.getConnection();
             PreparedStatement pstmt = con.prepareStatement(UPDATE_ARTICLE)) {
 
@@ -176,13 +176,18 @@ public class ArticleDAOJdbcImpl {
         }
     }
 
+    /**
+     * Methode in charge to delete an article from the database
+     * @param idArticle int
+     * @throws DALException
+     */
     @Override
-    public void deleteArticle(Article article) throws DALException {
+    public void deleteArticleById(int idArticle) throws DALException {
         try (Connection con = ConnectionProvider.getConnection();
             PreparedStatement pstmt = con.prepareStatement(DELETE_ARTICLE)) {
 
             // Définition des paramètres de la requête
-            pstmt.setInt(1, article.getId());
+            pstmt.setInt(1, idArticle);
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
