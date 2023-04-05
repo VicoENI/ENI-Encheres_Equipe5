@@ -22,15 +22,87 @@ public class Utilisateur {
     public Utilisateur() {}
     
     // Constructeur avec paramètres
-    public Utilisateur(String nom, String prenom, String email, String motDePasse, Date dateInscription) {
+    public Utilisateur(String nom, String prenom, String email, String motDePasse, Date dateInscription, String pseudo, String telephone,int credit, boolean administrateur, String ville, String rue, String codePostal) {
         setNom(nom);
         setNom(prenom);
         setEmail(email);
         setMotDePasse(motDePasse);
         setDateInscription(dateInscription);
+        setPseudo(pseudo);
+        setTelephone(telephone);
+        setCredit(credit);
+        setAdministrateur(administrateur);
+        setRue(rue);
+        setVille(ville);
+        setCodePostal(codePostal);
     }
     
-    // Getters et setters
+    public int getNoUtilisateur() {
+		return noUtilisateur;
+	}
+
+	public void setNoUtilisateur(int noUtilisateur) {
+		this.noUtilisateur = noUtilisateur;
+	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
+	public String getRue() {
+		return rue;
+	}
+
+	public void setRue(String rue) {
+		this.rue = rue;
+	}
+
+	public String getCodePostal() {
+		return codePostal;
+	}
+
+	public void setCodePostal(String codePostal) {
+		this.codePostal = codePostal;
+	}
+
+	public String getVille() {
+		return ville;
+	}
+
+	public void setVille(String ville) {
+		this.ville = ville;
+	}
+
+	public int getCredit() {
+		return credit;
+	}
+
+	public void setCredit(int credit) {
+		this.credit = credit;
+	}
+
+	public boolean isAdministrateur() {
+		return administrateur;
+	}
+
+	public void setAdministrateur(boolean administrateur) {
+		this.administrateur = administrateur;
+	}
+
+
+	public String getPseudo() {
+		return pseudo;
+	}
+
+	public void setPseudo(String pseudo) {
+		this.pseudo = pseudo;
+	}
+
+	// Getters et setters
     public int getId() {
         return noUtilisateur;
     }
@@ -75,37 +147,40 @@ public class Utilisateur {
         this.dateInscription = dateInscription;
     }
     
-    // Méthodes utilitaires
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Utilisateurs [pseudo=");
-        sb.append(pseudo);
-        sb.append(", nom=");
-        sb.append(nom);
-        sb.append(", prenom=");
-        sb.append(prenom);
-        sb.append(", email=");
-        sb.append(email);
-        sb.append(", telephone=");
-        sb.append(telephone);
-        sb.append(", rue=");
-        sb.append(rue);
-        sb.append(", codePostal=");
-        sb.append(codePostal);
-        sb.append(", ville=");
-        sb.append(ville);
-        sb.append(", motDePasse=");
-        sb.append(motDePasse);
-        sb.append(", credit=");
-        sb.append(credit);
-        sb.append(", administrateur=");
-        sb.append(administrateur);
-        sb.append("]");
-        return sb.toString();
-    }
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Utilisateur [getNoUtilisateur()=");
+		builder.append(getNoUtilisateur());
+		builder.append(", getTelephone()=");
+		builder.append(getTelephone());
+		builder.append(", getRue()=");
+		builder.append(getRue());
+		builder.append(", getCodePostal()=");
+		builder.append(getCodePostal());
+		builder.append(", getVille()=");
+		builder.append(getVille());
+		builder.append(", getCredit()=");
+		builder.append(getCredit());
+		builder.append(", isAdministrateur()=");
+		builder.append(isAdministrateur());
+		builder.append(", getId()=");
+		builder.append(getId());
+		builder.append(", getNom()=");
+		builder.append(getNom());
+		builder.append(", getPrenom()=");
+		builder.append(getPrenom());
+		builder.append(", getEmail()=");
+		builder.append(getEmail());
+		builder.append(", getMotDePasse()=");
+		builder.append(getMotDePasse());
+		builder.append(", getDateInscription()=");
+		builder.append(getDateInscription());
+		builder.append(", getPseudo()=");
+		builder.append(getPseudo());
+		builder.append("]");
+		return builder.toString();
+	}
 
-    public Object getPseudo() {
-        return null;
-    }
+ 
 }

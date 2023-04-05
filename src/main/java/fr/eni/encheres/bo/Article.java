@@ -13,7 +13,6 @@ public class Article {
     private int prixVente;
     private Utilisateur utilisateur;
     private Categorie categorie;
-    private Retrait retrait;
 
     public Article() {
         
@@ -21,7 +20,7 @@ public class Article {
     
     public Article(int noArticle, String nomArticle, String description, Date dateDebutEncheres,
                     Date dateFinEncheres, int prixInitial, int prixVente, Utilisateur utilisateur,
-                    Categorie categorie, Retrait retrait) {
+                    Categorie categorie) {
                 
         setNoArticle(noArticle);
         setNomArticle(nomArticle);
@@ -32,7 +31,6 @@ public class Article {
         setPrixVente(prixVente);
         setUtilisateur(utilisateur);
         setCategorie(categorie);
-        setRetrait(retrait);
 
     }
 
@@ -108,28 +106,28 @@ public class Article {
         this.categorie = categorie;
     }
 
-    public Retrait getRetrait() {
-        return retrait;
-    }
-
-    public void setRetrait(Retrait retrait) {
-        this.retrait = retrait;
-    }
-
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("ArticleVendu [noArticle=");
-        sb.append(noArticle);
-        sb.append(", nomArticle=");
-        sb.append(nomArticle);
-        sb.append(", description=");
-        sb.append(description);
-        sb.append(", dateDebutEncheres=");
-        sb.append(dateDebutEncheres);
-        sb.append(", dateFinEncheres=");
-        sb.append(dateFinEncheres);
-        return description;
-       
-    }
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Article [getNoArticle()=");
+		builder.append(getNoArticle());
+		builder.append(", getNomArticle()=");
+		builder.append(getNomArticle());
+		builder.append(", getDescription()=");
+		builder.append(getDescription());
+		builder.append(", getDateDebutEncheres()=");
+		builder.append(getDateDebutEncheres());
+		builder.append(", getDateFinEncheres()=");
+		builder.append(getDateFinEncheres());
+		builder.append(", getPrixInitial()=");
+		builder.append(getPrixInitial());
+		builder.append(", getPrixVente()=");
+		builder.append(getPrixVente());
+		builder.append(", getUtilisateur()=");
+		builder.append(getUtilisateur());
+		builder.append(", getCategorie()=");
+		builder.append(getCategorie());
+		builder.append("]");
+		return builder.toString();
+	}
 }

@@ -10,19 +10,39 @@ public class Enchere {
     private int idUtilisateur;
     private Date dateEnchere;
     private int montantEnchere;
+    private Utilisateur utilisateur;
+    private Article articleVendu;
     
     // Constructeur par défaut
     public Enchere() {}
     
     // Constructeur avec paramètres
-    public Enchere(int id, int idArticle, int idUtilisateur, Date dateEnchere, int montantEnchere) {
-        setId(idUtilisateur);// problemes
-        setIdUtilisateur(idUtilisateur);
-        setIdArticle(idArticle);
+    public Enchere(Date dateEnchere, int montantEnchere, Utilisateur utilisateur, Article articleVendu) {
+    	
         setDateEnchere(dateEnchere);
         setMontantEnchere(montantEnchere);
+        setUtilisateur(utilisateur);
+        setArticleVendu(articleVendu);
     }
-    // Getters et setters
+   
+
+	// Getters et setters
+    public Utilisateur getUtilisateur() {
+		return utilisateur;
+	}
+
+	public void setUtilisateur(Utilisateur utilisateur) {
+		this.utilisateur = utilisateur;
+	}
+
+	public Article getArticleVendu() {
+		return articleVendu;
+	}
+
+	public void setArticleVendu(Article articleVendu) {
+		this.articleVendu = articleVendu;
+	}
+	
     public int getId() {
         return id;
     }
@@ -63,21 +83,24 @@ public class Enchere {
         this.montantEnchere = montantEnchere;
     }
     
-    // Méthodes utilitaires
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Encheres [noEnchere=");
-        sb.append(dateEnchere);//verifier, mauvais 
-        sb.append(", dateEnchere=");
-        sb.append(dateEnchere);
-        sb.append(", montantEnchere=");
-        sb.append(montantEnchere);
-        sb.append(", article=");
-        sb.append(idArticle);// verifier
-        sb.append(", utilisateur=");
-        sb.append(idUtilisateur);//verifier
-        sb.append("]");
-        return sb.toString();
-    }
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Enchere [getUtilisateur()=");
+		builder.append(getUtilisateur());
+		builder.append(", getArticleVendu()=");
+		builder.append(getArticleVendu());
+		builder.append(", getId()=");
+		builder.append(getId());
+		builder.append(", getIdArticle()=");
+		builder.append(getIdArticle());
+		builder.append(", getIdUtilisateur()=");
+		builder.append(getIdUtilisateur());
+		builder.append(", getDateEnchere()=");
+		builder.append(getDateEnchere());
+		builder.append(", getMontantEnchere()=");
+		builder.append(getMontantEnchere());
+		builder.append("]");
+		return builder.toString();
+	}
 }
