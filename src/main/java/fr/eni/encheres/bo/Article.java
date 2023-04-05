@@ -1,23 +1,43 @@
 package fr.eni.encheres.bo;
 
+import java.time.LocalDate;
 import java.util.Date;
 
+/**
+ * Class representing an article.
+ * @author BaptistePoupet
+ * @version 1.0
+ */
 public class Article {
-
-    private int noArticle;
-    private String nomArticle;
-    private String description;
-    private Date dateDebutEncheres;
-    private Date dateFinEncheres;
-    private int prixInitial;
-    private int prixVente;
+    // Attributs
+    private int         noArticle;
+    private String      nomArticle;
+    private String      description;
+    private Date        dateDebutEncheres;
+    private Date        dateFinEncheres;
+    private int         prixInitial;
+    private int         prixVente;
     private Utilisateur utilisateur;
-    private Categorie categorie;
+    private Categorie   categorie;
 
-    public Article() {
-        
-    }
+    // Constructeurs
+    /**
+     * Default constructor.
+     */
+    public Article() {}
     
+    /**
+     * Constructor with all attributes.
+     * @param noArticle int
+     * @param nomArticle String
+     * @param description String
+     * @param dateDebutEncheres Date
+     * @param dateFinEncheres Date
+     * @param prixInitial int
+     * @param prixVente int
+     * @param utilisateur Utilisateur
+     * @param categorie Categorie
+     */
     public Article(int noArticle, String nomArticle, String description, Date dateDebutEncheres,
                     Date dateFinEncheres, int prixInitial, int prixVente, Utilisateur utilisateur,
                     Categorie categorie) {
@@ -34,78 +54,154 @@ public class Article {
 
     }
 
+    // Getters et setters
+    /**
+     * Returns the article number.
+     * @return noArticle int
+     */
     public int getNoArticle() {
         return noArticle;
     }
 
+    /**
+     * Sets the article number.
+     * @param noArticle int
+     */
     public void setNoArticle(int noArticle) {
         this.noArticle = noArticle;
     }
 
+    /**
+     * Returns the article name.
+     * @return nomArticle String
+     */
     public String getNomArticle() {
         return nomArticle;
     }
 
+    /**
+     * Sets the article name.
+     * @param nomArticle String
+     */
     public void setNomArticle(String nomArticle) {
         this.nomArticle = nomArticle;
     }
 
+    /**
+     * Returns the article description.
+     * @return description String
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Sets the article description.
+     * @param description String
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Returns the article start date.
+     * @return dateDebutEncheres Date
+     */
     public Date getDateDebutEncheres() {
         return dateDebutEncheres;
     }
 
-    public void setDateDebutEncheres(Date dateDebutEncheres) {
-        this.dateDebutEncheres = dateDebutEncheres;
+    /**
+     * Sets the article start date.
+     * @param date Date
+     */
+    public void setDateDebutEncheres(Date date) {
+        this.dateDebutEncheres = date;
     }
 
+    /**
+     * Returns the article end date.
+     * @return dateFinEncheres Date
+     */
     public Date getDateFinEncheres() {
         return dateFinEncheres;
     }
 
+    /**
+     * Sets the article end date.
+     * @param dateFinEncheres Date
+     */
     public void setDateFinEncheres(Date dateFinEncheres) {
         this.dateFinEncheres = dateFinEncheres;
     }
 
+    /**
+     * Returns the article initial price.
+     * @return prixInitial int
+     */
     public int getPrixInitial() {
         return prixInitial;
     }
 
+    /**
+     * Sets the article initial price.
+     * @param prixInitial int
+     */
     public void setPrixInitial(int prixInitial) {
         this.prixInitial = prixInitial;
     }
 
+    /**
+     * Returns the article selling price.
+     * @return prixVente int
+     */
     public int getPrixVente() {
         return prixVente;
     }
 
+    /**
+     * Sets the article selling price.
+     * @param prixVente int
+     */
     public void setPrixVente(int prixVente) {
         this.prixVente = prixVente;
     }
 
+    /**
+     * Returns the article owner.
+     * @return utilisateur Utilisateur
+     */
     public Utilisateur getUtilisateur() {
         return utilisateur;
     }
 
+    /**
+     * Sets the article owner.
+     * @param utilisateur Utilisateur
+     */
     public void setUtilisateur(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
     }
 
+    /**
+     * Returns the article category.
+     * @return categorie Categorie
+     */
     public Categorie getCategorie() {
         return categorie;
     }
 
+    /**
+     * Sets the article category.
+     * @param categorie Categorie
+     */
     public void setCategorie(Categorie categorie) {
         this.categorie = categorie;
     }
 
+    /**
+     * Returns the article as a string.
+     */
     @Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
