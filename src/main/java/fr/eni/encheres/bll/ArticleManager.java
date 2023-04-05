@@ -2,6 +2,10 @@ package fr.eni.encheres.bll;
 
 import java.util.List;
 
+import fr.eni.encheres.bo.Article;
+import fr.eni.encheres.dal.ArticleDAO;
+import fr.eni.encheres.exceptions.BLLException;
+
 /**
  * Class managing the articles.
  * @author mkebeEni
@@ -116,42 +120,5 @@ public class ArticleManager {
 	    } catch (BLLException e) {
 	        throw new BLLException("Echec de la suppression de l'article - ", e);
 	    }
-	}
-	
-	/**
-	 * User validation
-	 * @param u Utilisateur
-	 * @throws BLLException
-	 */
-	public void validerUser(Utilisateur u) throws BLLException
-	{
-		boolean valide = true;
-		StringBuffer sb = new StringBuffer();
-		
-		if(u==null){
-			throw new BLLException("Utilisateur null");
-		}
-		//Les attributs d'un utilisateur sont obligatoires
-		if(u.getNom_article()==null || u.getNom_article().trim().length()==0){
-			sb.append("Le nom de l'article est obligatoire.\n");
-			valide = false;
-		}
-		if(u.getDescription()==null || u.getDescription().trim().length()==0){
-			sb.append("La description est obligatoire.\n");
-			valide = false;
-		}
-		if(u.getDate_fin_encheres()==null || u.getDate_fin_encheres().trim().length()==0){
-			sb.append("Le nom  est obligatoire.\n");
-			valide = false;
-		}
-		if(u.getPrenom()==null || u.getPrenom().trim().length()==0){
-			sb.append("Le prénom  est obligatoire.\n");
-			valide = false;
-		}
-		
-		if(!valide){
-			throw new BLLException(sb.toString());
-		}
-
 	}
 }

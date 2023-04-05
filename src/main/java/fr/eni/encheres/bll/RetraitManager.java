@@ -3,6 +3,10 @@ package fr.eni.encheres.bll;
 import java.sql.SQLException;
 import java.util.List;
 
+import fr.eni.encheres.bo.Retrait;
+import fr.eni.encheres.dal.RetraitDAO;
+import fr.eni.encheres.exceptions.BLLException;
+
 /**
  * Class managing the Retrait.
  * @author mkebeEni
@@ -11,7 +15,7 @@ import java.util.List;
 public class RetraitManager {
 
 	// Liste des Retrait gérée par la classe RetraitManager
-	private List<Categorie> listRetraits;
+	private List<Retrait> listRetraits;
 	
 	// Accès aux données des Retrait
 	private RetraitDAO daoRetraits;

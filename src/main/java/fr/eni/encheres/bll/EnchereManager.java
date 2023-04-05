@@ -3,6 +3,10 @@ package fr.eni.encheres.bll;
 import java.sql.SQLException;
 import java.util.List;
 
+import fr.eni.encheres.bo.Enchere;
+import fr.eni.encheres.dal.EnchereDAO;
+import fr.eni.encheres.exceptions.BLLException;
+
 /**
  * Class managing the Enchere.
  * @author mkebeEni
@@ -39,32 +43,6 @@ public class EnchereManager {
 	 */
 	public List<Enchere> getlistEncheres() {
 		return listEncheres;
-	}
-	
-	/**
-	 * Add user in the database
-	 * @param newEnchere Utilisateur
-	 * @return index du nouvel utilisateur dans la base de données
-	 * @throws BLLException 
-	 */
-	public int Enchere(Utilisateur newEnchere) throws BLLException {
-		Enchere enchere;
-		try {
-			enchere = daoEncheres.selectById(newEnchere);
-		} catch (BLLException e) {
-			throw new BLLException("Echec selectById dans addEnchere", e);
-		}
-		if (enchere!= null){
-			throw new BLLException("Enchere deja existant.");
-		}
-		try {
-			validerEnchere(newEnchere);
-			daoEncheres.insert(newEnchere);
-			listEncheres.add(newEnchere);
-		} catch (BLLException e) {
-			throw new BLLException("Echec addEnchere", e);
-		}
-		return listEncheres.size()-1;
 	}
 	
 	/**

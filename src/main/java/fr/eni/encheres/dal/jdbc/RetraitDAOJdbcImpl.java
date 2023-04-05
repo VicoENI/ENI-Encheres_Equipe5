@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.dal.RetraitDAO;
 import fr.eni.encheres.exceptions.DALException;
 

@@ -3,6 +3,10 @@ package fr.eni.encheres.bll;
 import java.sql.SQLException;
 import java.util.List;
 
+import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.dal.UtilisateurDAO;
+import fr.eni.encheres.exceptions.BLLException;
+
 /**
  * Class managing the Utilisateur.
  * @author mkebeEni
@@ -73,7 +77,7 @@ public class UtilisateurManager {
 	 * @param utilisateur Utilisateur
 	 * @throws BLLException
 	 */
-	public void updateUser(Utilisateur utilisateur) throws BLLException, SQLException, DALException{
+	public void updateUser(Utilisateur utilisateur) throws BLLException {
 		Utilisateur existingUtilisateur;
 		try {
 			existingUtilisateur = daoUtilisateurs.selectById(utilisateur.getIdUtilisateur());

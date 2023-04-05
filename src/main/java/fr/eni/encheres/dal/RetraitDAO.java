@@ -2,6 +2,7 @@ package fr.eni.encheres.dal;
 
 import java.util.List;
 
+import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.exceptions.DALException;
 
 /**
