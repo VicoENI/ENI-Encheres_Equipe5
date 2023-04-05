@@ -3,71 +3,83 @@ package fr.eni.encheres.bll;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Class managing the categories.
+ * @author mkebeEni
+ * @version 1.0
+ */
 public class CategorieManager {
 
-private List<Categorie> listCategories;
+	// Liste des catégories gérée par la classe CategorieManager
+	private List<Categorie> listCategories;
 	
+	// Accès aux données des catégories
 	private CategorieDAO daoCategories;
 	
 
-	public CategorieManager() throws BLLException, SQLException, DALException{
-			//Instancier le Data Access Object
+	/**
+	 * Constructor of the CategorieManager class. Initializes the list of categories and the connection to the database.
+	 * @throws BLLException
+	 */
+	public CategorieManager() throws BLLException {
+		//Instancier le Data Access Object
 		daoCategories =DAOFactory.getCategorieDAO();
 		
-		 	//Charger la liste des catégories
-			try {
-				listCategories = daoCategories.selectAll();
-			} catch (DALException e) {
-				throw new DALException("Echec du chargement du listCategories - ", e);
-			}
+		//Charger la liste des catégories
+		try {
+			listCategories = daoCategories.selectAll();
+		} catch (BLLException e) {
+			throw new BLLException("Echec du chargement du listCategories - ", e);
+		}
 	}
 	
-	
+	/**
+	 * Get the list of categories
+	 * @return List of categories
+	 */
 	public List<Categorie> getlistCategories() {
 		return listCategories;
 	}
 	
 	/**
-	 * Ajout d'une catégorie à la liste
-	 * @param newUser
-	 * @return index de la nouvelle catégorie dans la base de données
+	 * Add a new category to the list
+	 * @param newCategorie Categorie
+	 * @return The size of the list -1
 	 * @throws BLLException 
 	 * @throws SQLException 
 	 * @throws DALException 
 	 */
-	public int addCategorie(Categorie newCategorie) throws BLLException, SQLException, DALException {
+	public int addCategorie(Categorie newCategorie) throws BLLException {
 		Categorie categorie;
 		try {
 			categorie = daoCategories.selectById(newCategorie);
-		} catch (DALException e) {
-			throw new DALException("Echec selectById dans addcategorie", e);
+		} catch (BLLException e) {
+			throw new BLLException("Echec selectById dans addcategorie", e);
 		}
 		if (categorie!= null){
-//		if(newUser.getIdutilisateuricle()!=null){
 			throw new BLLException("categorie deja existante.");
 		}
 		try {
 			validerCategorie(newCategorie);
 			daoCategories.insert(newCategorie);
 			listCategories.add(newCategorie);
-		} catch (DALException e) {
+		} catch (BLLException e) {
 			throw new BLLException("Echec addCategorie", e);
 		}
 		return listCategories.size()-1;
 	}
 	
 	/**
-	 * updateCategorie : Modifier une categorie de la base
+	 * Update a category
 	 * @param categorie BLLException
-	 * @throws SQLException 
-	 * @throws DALException 
+	 * @throws BLLException 
 	 */
-	public void updateCategorie(Categorie categorie) throws BLLException, SQLException, DALException{
+	public void updateCategorie(Categorie categorie) throws BLLException {
 		Categorie existingCategorie;
 		try {
 			existingCategorie = daoCategories.selectById(categorie.getIdCategorie());
-		} catch (DALException e) {
-			throw new DALException("Echec selectById dans updateCategorie", e);
+		} catch (BLLException e) {
+			throw new BLLException("Echec selectById dans updateCategorie", e);
 		}
 		if (existingCategorie==null){
 			throw new BLLException("utilisateur inexistant.");
@@ -77,35 +89,32 @@ private List<Categorie> listCategories;
 			validerCategorie(categorie);
 			daoCategories.update(categorie);
 			
-		} catch (DALException e) {
+		} catch (BLLException e) {
 			throw new BLLException("Echec updateCategorie -categorie:"+categorie, e);
 		}
 	}
 	
 	
 	/**
-	 * extraire une catégorie de la base de données
-	 * @param ref
-	 * @return
-	 * @throws Exception
+	 * Get a category by its index
+	 * @param index int
+	 * @return index of the category
 	 */
 	public Categorie getCategorie(int index) {
 		return listCategories.get(index);
 	}
 	
 	/**
-	 * Supprimer une catégorie de la liste
-	 * @param index
+	 * Delete a category by its index in the list
+	 * @param index int
 	 * @throws BLLException
-	 * @throws SQLException 
-	 * @throws DALException 
 	 */
-	public void removeCategorie(int index) throws BLLException, SQLException, DALException{
+	public void removeCategorie(int index) throws BLLException {
 		try {
 			daoCategories.delete(listCategories.get(index).getIdCategorie());
 			listCategories.remove(index);
-		} catch (DALException e) {
-			throw new DALException("Echec de la suppression de la catégorie - ", e);
+		} catch (BLLException e) {
+			throw new BLLException("Echec de la suppression de la catégorie - ", e);
 		}
 		
 	}

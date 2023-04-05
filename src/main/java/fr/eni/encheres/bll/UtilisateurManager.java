@@ -3,45 +3,56 @@ package fr.eni.encheres.bll;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Class managing the Utilisateur.
+ * @author mkebeEni
+ * @version 1.0
+ */
 public class UtilisateurManager {
 
-
-private List<Utilisateur> listUsers;
+	// Liste des Utilisateur gérée par la classe UtilisateurManager
+	private List<Utilisateur> listUsers;
 	
+	// Accès aux données des Utilisateur
 	private UtilisateurDAO daoUtilisateurs;
 	
 
-	public UtilisateurManager() throws BLLException, SQLException, DALException{
-			//Instancier le Data Access Object
+	/**
+	 * Constructor of the UtilisateurManager class. Initializes the list of Utilisateur and the connection to the database.
+	 * @throws BLLException
+	 */
+	public UtilisateurManager() throws BLLException {
+		//Instancier le Data Access Object
 		daoUtilisateurs =DAOFactory.getUtilisateurDAO();
 		
-		 	//Charger le listUsers
-			try {
-				listUsers = daoUtilisateurs.selectAll();
-			} catch (DALException e) {
-				throw new DALException("Echec du chargement du listUsers - ", e);
-			}
+		//Charger le listUsers
+		try {
+			listUsers = daoUtilisateurs.selectAll();
+		} catch (BLLException e) {
+			throw new BLLException("Echec du chargement du listUsers - ", e);
+		}
 	}
 	
-	
+	/**
+	 * Get the list of Utilisateur
+	 * @return List of Utilisateur
+	 */
 	public List<Utilisateur> getlistUsers() {
 		return listUsers;
 	}
 	
 	/**
-	 * Ajout d'un utilisateur à la base de données
-	 * @param newUser
-	 * @return index du nouvel utilisateur dans la base de données
-	 * @throws BLLException 
-	 * @throws SQLException 
-	 * @throws DALException 
+	 * Add user in the database
+	 * @param newUser Utilisateur
+	 * @return index of the new user in the database
+	 * @throws BLLException
 	 */
-	public int addUser(Utilisateur newUser) throws BLLException, SQLException, DALException {
+	public int addUser(Utilisateur newUser) throws BLLException {
 		Utilisateur utilisateur;
 		try {
 			utilisateur = daoUtilisateurs.selectById(newUser);
-		} catch (DALException e) {
-			throw new DALException("Echec selectById dans addUser", e);
+		} catch (BLLException e) {
+			throw new BLLException("Echec selectById dans addUser", e);
 		}
 		if (utilisateur!= null){
 			throw new BLLException("Utilisateur deja existant.");
@@ -50,7 +61,7 @@ private List<Utilisateur> listUsers;
 			validerUser(newUser);
 			daoUtilisateurs.insert(newUser);
 			listUsers.add(newUser);
-		} catch (DALException e) {
+		} catch (BLLException e) {
 			throw new BLLException("Echec addUser", e);
 		}
 		return listUsers.size()-1;
@@ -58,18 +69,16 @@ private List<Utilisateur> listUsers;
 	
 	
 	/**
-	 * updateUtilisateur : Modifier un utilisateur de la base
-	 * @param utilisateur
+	 * Update user in the database
+	 * @param utilisateur Utilisateur
 	 * @throws BLLException
-	 * @throws SQLException 
-	 * @throws DALException 
 	 */
 	public void updateUser(Utilisateur utilisateur) throws BLLException, SQLException, DALException{
 		Utilisateur existingUtilisateur;
 		try {
 			existingUtilisateur = daoUtilisateurs.selectById(utilisateur.getIdUtilisateur());
-		} catch (DALException e) {
-			throw new DALException("Echec selectById dans updateUser", e);
+		} catch (BLLException e) {
+			throw new BLLException("Echec selectById dans updateUser", e);
 		}
 		if (existingUtilisateur==null){
 			throw new BLLException("utilisateur inexistant.");
@@ -79,15 +88,15 @@ private List<Utilisateur> listUsers;
 			validerUser(utilisateur);
 			daoUtilisateurs.update(utilisateur);
 			
-		} catch (DALException e) {
+		} catch (BLLException e) {
 			throw new BLLException("Echec updateUtilisateur-utilisateur:"+utilisateur, e);
 		}
 	}
 	
 	/**
-	 * extraire un utilisateur de la base de données
-	 * @param id
-	 * @return
+	 * Extract an user from the list of users
+	 * @param index int
+	 * @return Utilisateur
 	 * @throws Exception
 	 */
 	public Utilisateur getUtilisateur(int index) {
@@ -95,25 +104,23 @@ private List<Utilisateur> listUsers;
 	}
 	
 	/**
-	 * Supprimer un article du catalogue
-	 * @param index
+	 * Delete an user from the list of users
+	 * @param index int
 	 * @throws BLLException
-	 * @throws SQLException 
-	 * @throws DALException 
 	 */
-	public void removeUser(int index) throws BLLException, SQLException, DALException{
+	public void removeUser(int index) throws BLLException {
 		try {
 			daoUtilisateurs.delete(listUsers.get(index).getIdUtilisateur());
 			listUsers.remove(index);
-		} catch (DALException e) {
-			throw new DALException("Echec de la suppression de l'utilisateur - ", e);
+		} catch (BLLException e) {
+			throw new BLLException("Echec de la suppression de l'utilisateur - ", e);
 		}
 		
 	}
 	
 	/**
-	 * Valider les données d'un utilisateur
-	 * @param a
+	 * Check user data
+	 * @param u Utilisateur
 	 * @throws BLLException
 	 */
 	public void validerUser(Utilisateur u) throws BLLException
