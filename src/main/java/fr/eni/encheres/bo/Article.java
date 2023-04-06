@@ -1,6 +1,5 @@
 package fr.eni.encheres.bo;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -17,8 +16,8 @@ public class Article {
     private Date        dateFinEncheres;
     private int         prixInitial;
     private int         prixVente;
-    private Utilisateur utilisateur;
-    private Categorie   categorie;
+    private int utilisateur;
+    private int   categorie;
 
     // Constructeurs
     /**
@@ -39,8 +38,8 @@ public class Article {
      * @param categorie Categorie
      */
     public Article(int noArticle, String nomArticle, String description, Date dateDebutEncheres,
-                    Date dateFinEncheres, int prixInitial, int prixVente, Utilisateur utilisateur,
-                    Categorie categorie) {
+                    Date dateFinEncheres, int prixInitial, int prixVente, int utilisateur,
+                    int categorie) {
                 
         setNoArticle(noArticle);
         setNomArticle(nomArticle);
@@ -171,32 +170,32 @@ public class Article {
      * Returns the article owner.
      * @return utilisateur Utilisateur
      */
-    public Utilisateur getUtilisateur() {
+    public int getUtilisateur() {
         return utilisateur;
     }
 
     /**
      * Sets the article owner.
-     * @param utilisateur Utilisateur
+     * @param i Utilisateur
      */
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
+    public void setUtilisateur(int i) {
+        this.utilisateur = i;
     }
 
     /**
      * Returns the article category.
      * @return categorie Categorie
      */
-    public Categorie getCategorie() {
+    public int getCategorie() {
         return categorie;
     }
 
     /**
      * Sets the article category.
-     * @param categorie Categorie
+     * @param i Categorie
      */
-    public void setCategorie(Categorie categorie) {
-        this.categorie = categorie;
+    public void setCategorie(int i) {
+        this.categorie = i;
     }
 
     /**

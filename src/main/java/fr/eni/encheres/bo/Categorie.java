@@ -41,5 +41,8 @@ public class Categorie {
         sb.append("]");
         return sb.toString();
     }
+
+    public void setCategorieId(int noCategorie2) {
+    }
     
 }
