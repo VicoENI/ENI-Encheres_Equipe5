@@ -10,7 +10,7 @@ import java.util.Date;
 public class Article {
     // Attributs
     private int         noArticle;
-    private String      nomArticle;
+    private String      nomArticle; 
     private String      description;
     private Date        dateDebutEncheres;
     private Date        dateFinEncheres;
