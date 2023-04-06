@@ -63,7 +63,7 @@ public class RetraitManager {
 			throw new BLLException("retrait deja existante.");
 		}
 		try {
-			daoRetraits.insertRetrait(newRetrait);
+			daoRetraits.createRetrait(newRetrait);
 			listRetraits.add(newRetrait);
 		} catch (BLLException e) {
 			throw new BLLException("Echec addRetrait", e);

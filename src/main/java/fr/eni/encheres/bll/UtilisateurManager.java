@@ -30,11 +30,11 @@ public class UtilisateurManager {
 		//Instancier le Data Access Object
 		daoUtilisateurs = (UtilisateurDAO) new UtilisateurDAOJdbcImpl();
 		
-		//Charger le listUsers
+		//Charger le listUtilisateurs
 		try {
-			listUtilisateurs = daoUtilisateurs.selectAll();
+			listUtilisateurs = daoUtilisateurs.getUtilisateurs();
 		} catch (Exception e) {
-			throw new BLLException("Echec du chargement du listUsers - ", e);
+			throw new BLLException("Echec du chargement du listUtilisateur - ", e);
 		}
 	}
 	
@@ -42,56 +42,56 @@ public class UtilisateurManager {
 	 * Get the list of Utilisateur
 	 * @return List of Utilisateur
 	 */
-	public List<Utilisateur> getlistUsers() {
-		return listUsers;
+	public List<Utilisateur> getlistUtilisateurs() {
+		return listUtilisateurs;
 	}
 	
 	/**
-	 * Add user in the database
-	 * @param newUser Utilisateur
-	 * @return index of the new user in the database
+	 * Add Utilisateur in the database
+	 * @param newUtilisateur Utilisateur
+	 * @return index of the new Utilisateur in the database
 	 * @throws BLLException
 	 */
-	public int addUser(Utilisateur newUser) throws BLLException {
+	public int addUtilisateur(Utilisateur newUtilisateur) throws BLLException {
 		Utilisateur utilisateur;
 		try {
-			utilisateur = daoUtilisateurs.selectById(newUser);
+			utilisateur = daoUtilisateurs.selectUtilisateurById(newUtilisateur);
 		} catch (BLLException e) {
-			throw new BLLException("Echec selectById dans addUser", e);
+			throw new BLLException("Echec selectById dans addUtilisateur", e);
 		}
 		if (utilisateur!= null){
 			throw new BLLException("Utilisateur deja existant.");
 		}
 		try {
-			validerUser(newUser);
-			daoUtilisateurs.insert(newUser);
-			listUsers.add(newUser);
+			validerUtilisateur(newUtilisateur);
+			daoUtilisateurs.addUtilisateur(newUtilisateur);
+			listUtilisateurs.add(newUtilisateur);
 		} catch (BLLException e) {
-			throw new BLLException("Echec addUser", e);
+			throw new BLLException("Echec addUtilisateur", e);
 		}
-		return listUsers.size()-1;
+		return listUtilisateurs.size()-1;
 	}
 	
 	
 	/**
-	 * Update user in the database
+	 * Update Utilisateur in the database
 	 * @param utilisateur Utilisateur
 	 * @throws BLLException
 	 */
-	public void updateUser(Utilisateur utilisateur) throws BLLException {
+	public void updateUtilisateur(Utilisateur utilisateur) throws BLLException {
 		Utilisateur existingUtilisateur;
 		try {
-			existingUtilisateur = daoUtilisateurs.selectById(utilisateur.getIdUtilisateur());
+			existingUtilisateur = daoUtilisateurs.selectUtilisateurById(utilisateur.getNoUtilisateur());
 		} catch (BLLException e) {
-			throw new BLLException("Echec selectById dans updateUser", e);
+			throw new BLLException("Echec selectById dans updateUtilisateur", e);
 		}
 		if (existingUtilisateur==null){
 			throw new BLLException("utilisateur inexistant.");
 		}
-		utilisateur.setIdUtilisateur(existingUtilisateur.getIdUtilisateur());
+		utilisateur.setNoUtilisateur(existingUtilisateur.getNoUtilisateur());
 		try {
-			validerUser(utilisateur);
-			daoUtilisateurs.update(utilisateur);
+			validerUtilisateur(utilisateur);
+			daoUtilisateurs.updateUtilisateur(utilisateur);
 			
 		} catch (BLLException e) {
 			throw new BLLException("Echec updateUtilisateur-utilisateur:"+utilisateur, e);
@@ -99,36 +99,36 @@ public class UtilisateurManager {
 	}
 	
 	/**
-	 * Extract an user from the list of users
+	 * Extract an Utilisateur from the list of Utilisateurs
 	 * @param index int
 	 * @return Utilisateur
 	 * @throws Exception
 	 */
-	public Utilisateur getUtilisateur(int index) {
-		return listUsers.get(index);
+	public Utilisateur getUtilisateurs(int index) {
+		return listUtilisateurs.get(index);
 	}
 	
 	/**
-	 * Delete an user from the list of users
+	 * Delete an Utilisateur from the list of Utilisateurs
 	 * @param index int
 	 * @throws BLLException
 	 */
-	public void removeUser(int index) throws BLLException {
+	public void removeUtilisateur(int index) throws BLLException {
 		try {
-			daoUtilisateurs.delete(listUsers.get(index).getIdUtilisateur());
-			listUsers.remove(index);
-		} catch (BLLException e) {
+			daoUtilisateurs.deleteUtilisateur(listUtilisateurs.get(index).getNoUtilisateur());
+			listUtilisateurs.remove(index);
+		} catch (Exception e) {
 			throw new BLLException("Echec de la suppression de l'utilisateur - ", e);
 		}
 		
 	}
 	
 	/**
-	 * Check user data
+	 * Check Utilisateur data
 	 * @param u Utilisateur
 	 * @throws BLLException
 	 */
-	public void validerUser(Utilisateur u) throws BLLException
+	public void validerUtilisateur(Utilisateur u) throws BLLException
 	{
 		boolean valide = true;
 		StringBuffer sb = new StringBuffer();
@@ -141,7 +141,7 @@ public class UtilisateurManager {
 			sb.append("Le pseudo est obligatoire.\n");
 			valide = false;
 		}
-		if(u.getMail()==null || u.getMail().trim().length()==0){
+		if(u.getEmail()==null || u.getEmail().trim().length()==0){
 			sb.append("L'adresse mail est obligatoire.\n");
 			valide = false;
 		}
@@ -157,11 +157,11 @@ public class UtilisateurManager {
 			sb.append("La ville est obligatoire.\n");
 			valide = false;
 		}
-		if(u.getCredit()==null || u.getCredit().trim().length()==0){
+		if(u.getCredit()==0 || u.getCredit().trim().length()==0){
 			sb.append("Le crédit  est obligatoire.\n");
 			valide = false;
 		}
-		if(u.getCode_postal()==null || u.getCode_postal().trim().length()==0){
+		if(u.getCodePostal()==null || u.getCodePostal().trim().length()==0){
 			sb.append("Le code postal est obligatoire.\n");
 			valide = false;
 		}
@@ -169,7 +169,7 @@ public class UtilisateurManager {
 			sb.append("La rue est obligatoire.\n");
 			valide = false;
 		}
-		if(u.getMot_de_passe()==null || u.getMot_de_passe().trim().length()==0){
+		if(u.getMotDePasse()==null || u.getMotDePasse().trim().length()==0){
 			sb.append("Le mot de passe est obligatoire.\n");
 			valide = false;
 		}	
