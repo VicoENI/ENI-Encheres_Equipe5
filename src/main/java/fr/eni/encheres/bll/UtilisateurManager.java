@@ -56,7 +56,7 @@ public class UtilisateurManager {
 		Utilisateur utilisateur;
 		try {
 			utilisateur = daoUtilisateurs.selectUtilisateurById(newUtilisateur);
-		} catch (BLLException e) {
+		} catch (Exception e) {
 			throw new BLLException("Echec selectById dans addUtilisateur", e);
 		}
 		if (utilisateur!= null){
@@ -82,7 +82,7 @@ public class UtilisateurManager {
 		Utilisateur existingUtilisateur;
 		try {
 			existingUtilisateur = daoUtilisateurs.selectUtilisateurById(utilisateur.getNoUtilisateur());
-		} catch (BLLException e) {
+		} catch (Exception e) {
 			throw new BLLException("Echec selectById dans updateUtilisateur", e);
 		}
 		if (existingUtilisateur==null){
