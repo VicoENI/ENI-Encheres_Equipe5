@@ -32,9 +32,9 @@ public class UtilisateurManager {
 		
 		//Charger le listUsers
 		try {
-			listUtilisateurs = daoUtilisateurs.getUtilisateurs();
+			listUtilisateurs = daoUtilisateurs.selectAll();
 		} catch (Exception e) {
-			throw new BLLException("Echec du chargement du listUtilisateurss - ", e);
+			throw new BLLException("Echec du chargement du listUsers - ", e);
 		}
 	}
 	
@@ -42,8 +42,8 @@ public class UtilisateurManager {
 	 * Get the list of Utilisateur
 	 * @return List of Utilisateur
 	 */
-	public List<Utilisateur> getlistUtilisateurs() {
-		return listUtilisateurs;
+	public List<Utilisateur> getlistUsers() {
+		return listUsers;
 	}
 	
 	/**
@@ -52,10 +52,10 @@ public class UtilisateurManager {
 	 * @return index of the new user in the database
 	 * @throws BLLException
 	 */
-	public int addUtilisateur(Utilisateur newUtilisateur) throws BLLException {
+	public int addUser(Utilisateur newUser) throws BLLException {
 		Utilisateur utilisateur;
 		try {
-			utilisateur = daoUtilisateurs.selectUtilisateurById(newUtilisateur.getNoUtilisateur());
+			utilisateur = daoUtilisateurs.selectById(newUser);
 		} catch (BLLException e) {
 			throw new BLLException("Echec selectById dans addUser", e);
 		}
@@ -63,13 +63,13 @@ public class UtilisateurManager {
 			throw new BLLException("Utilisateur deja existant.");
 		}
 		try {
-			validerUtilisateur(newUtilisateur);
-			daoUtilisateurs.insertUtilisateur(newUtilisateur);
-			listUtilisateurs.add(newUtilisateur);
+			validerUser(newUser);
+			daoUtilisateurs.insert(newUser);
+			listUsers.add(newUser);
 		} catch (BLLException e) {
 			throw new BLLException("Echec addUser", e);
 		}
-		return listUtilisateurs.size()-1;
+		return listUsers.size()-1;
 	}
 	
 	
@@ -78,20 +78,20 @@ public class UtilisateurManager {
 	 * @param utilisateur Utilisateur
 	 * @throws BLLException
 	 */
-	public void updateUtilisateur(Utilisateur utilisateur) throws BLLException {
+	public void updateUser(Utilisateur utilisateur) throws BLLException {
 		Utilisateur existingUtilisateur;
 		try {
-			existingUtilisateur = daoUtilisateurs.selectUtilisateurById(utilisateur.getNoUtilisateur());
-		} catch (Exception e) {
+			existingUtilisateur = daoUtilisateurs.selectById(utilisateur.getIdUtilisateur());
+		} catch (BLLException e) {
 			throw new BLLException("Echec selectById dans updateUser", e);
 		}
 		if (existingUtilisateur==null){
 			throw new BLLException("utilisateur inexistant.");
 		}
-		utilisateur.setNoUtilisateur(existingUtilisateur.getNoUtilisateur());
+		utilisateur.setIdUtilisateur(existingUtilisateur.getIdUtilisateur());
 		try {
-			validerUtilisateur(utilisateur);
-			daoUtilisateurs.updateUtilisateurById(utilisateur);
+			validerUser(utilisateur);
+			daoUtilisateurs.update(utilisateur);
 			
 		} catch (BLLException e) {
 			throw new BLLException("Echec updateUtilisateur-utilisateur:"+utilisateur, e);
@@ -105,7 +105,7 @@ public class UtilisateurManager {
 	 * @throws Exception
 	 */
 	public Utilisateur getUtilisateur(int index) {
-		return listUtilisateurs.get(index);
+		return listUsers.get(index);
 	}
 	
 	/**
@@ -115,9 +115,9 @@ public class UtilisateurManager {
 	 */
 	public void removeUser(int index) throws BLLException {
 		try {
-			daoUtilisateurs.deleteUtilisateurById(listUtilisateurs.get(index).getNoUtilisateur());
-			listUtilisateurs.remove(index);
-		} catch (Exception e) {
+			daoUtilisateurs.delete(listUsers.get(index).getIdUtilisateur());
+			listUsers.remove(index);
+		} catch (BLLException e) {
 			throw new BLLException("Echec de la suppression de l'utilisateur - ", e);
 		}
 		
@@ -128,7 +128,7 @@ public class UtilisateurManager {
 	 * @param u Utilisateur
 	 * @throws BLLException
 	 */
-	public void validerUtilisateur(Utilisateur u) throws BLLException
+	public void validerUser(Utilisateur u) throws BLLException
 	{
 		boolean valide = true;
 		StringBuffer sb = new StringBuffer();
@@ -141,7 +141,7 @@ public class UtilisateurManager {
 			sb.append("Le pseudo est obligatoire.\n");
 			valide = false;
 		}
-		if(u.getEmail()==null || u.getEmail().trim().length()==0){
+		if(u.getMail()==null || u.getMail().trim().length()==0){
 			sb.append("L'adresse mail est obligatoire.\n");
 			valide = false;
 		}
@@ -161,7 +161,7 @@ public class UtilisateurManager {
 			sb.append("Le crédit  est obligatoire.\n");
 			valide = false;
 		}
-		if(u.getCodePostal()==null || u.getCodePostal().trim().length()==0){
+		if(u.getCode_postal()==null || u.getCode_postal().trim().length()==0){
 			sb.append("Le code postal est obligatoire.\n");
 			valide = false;
 		}
@@ -169,7 +169,7 @@ public class UtilisateurManager {
 			sb.append("La rue est obligatoire.\n");
 			valide = false;
 		}
-		if(u.getMotDePasse()==null || u.getMotDePasse().trim().length()==0){
+		if(u.getMot_de_passe()==null || u.getMot_de_passe().trim().length()==0){
 			sb.append("Le mot de passe est obligatoire.\n");
 			valide = false;
 		}	

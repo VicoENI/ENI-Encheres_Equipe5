@@ -103,7 +103,7 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
      * @throws DALException
      */
     @Override
-    public void updateUtilisateur(Utilisateur utilisateur) throws DALException {
+    public void updateUtilisateurById(Utilisateur utilisateur) throws DALException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_UTILISATEUR)) {
             statement.setString(1, utilisateur.getPseudo());
             statement.setString(2, utilisateur.getNom());
@@ -128,7 +128,7 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
      * @throws DALException
      */
     @Override
-    public void deleteUtilisateur(Utilisateur utilisateur) throws DALException {
+    public void deleteUtilisateurById(Utilisateur utilisateur) throws DALException {
         try(Connection cnx = ConnectionProvider.getConnection()) {
             PreparedStatement pstmt = cnx.prepareStatement(DELETE_UTILISATEUR);
             pstmt.setInt(1, utilisateur.getNoUtilisateur());
