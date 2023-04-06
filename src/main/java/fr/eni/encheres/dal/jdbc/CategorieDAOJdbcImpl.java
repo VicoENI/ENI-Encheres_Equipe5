@@ -3,6 +3,8 @@ package fr.eni.encheres.dal.jdbc;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
     // Création des requêtes SQL
     private static final String CREATE_CATEGORIE    = "INSERT INTO CATEGORIES (libelle) VALUES (?)";
     private static final String GET_ALL_CATEGORIES  = "SELECT * FROM CATEGORIES";
-    private static final String GET_CATEGORIE_BY_NO = "SELECT * FROM CATEGORIES WHERE no_categorie = ?";
+    private static final String GET_CATEGORIE_BY_ID = "SELECT * FROM CATEGORIES WHERE no_categorie = ?";
     private static final String UPDATE_CATEGORIE    = "UPDATE CATEGORIES SET libelle = ? WHERE no_categorie = ?";
     private static final String DELETE_CATEGORIE    = "DELETE FROM CATEGORIES WHERE no_categorie = ?";
 
@@ -29,10 +31,10 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
     
     /**
      * Constructor of the class CategorieDAOJdbcImpl which takes a connection as a parameter
-     * @param connection
+     * @throws SQLException
      */
-    public CategorieDAOJdbcImpl(Connection connection) {
-        this.connection = connection;
+    public CategorieDAOJdbcImpl() throws SQLException {
+        this.connection = JdbcTools.getConnection();
     }
 
     /**
@@ -42,9 +44,26 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
      */
     @Override
     public void createCategorie(Categorie categorie) throws DALException {
-        try (PreparedStatement statement = connection.prepareStatement(CREATE_CATEGORIE)) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = JdbcTools.getConnection();
+            statement = connection.prepareStatement(CREATE_CATEGORIE);
             statement.setString(1, categorie.getLibelle());
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DALException("Erreur lors de la création de la catégorie", e);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new DALException("Erreur lors de la création de la catégorie", e);
+            }
         }
     }
 
@@ -55,14 +74,35 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
      */
     @Override
     public List<Categorie> getAllCategories() throws DALException {
-        List<Categorie> categories = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(GET_ALL_CATEGORIES)) {
-            ResultSet resultSet = statement.executeQuery();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        List<Categorie> categories = new ArrayList<Categorie>();
+        try {
+            connection = JdbcTools.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(GET_ALL_CATEGORIES);
+            Categorie categorie = null;
+
             while (resultSet.next()) {
-                int noCategorie = resultSet.getInt("no_categorie");
-                String libelle = resultSet.getString("libelle");
-                Categorie categorie = new Categorie(noCategorie, libelle);
+                categorie = new Categorie(resultSet.getString("libelle"));
                 categories.add(categorie);
+            }
+        } catch (SQLException e) {
+            throw new DALException("Erreur lors de la récupération des catégories", e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new DALException("Erreur lors de la récupération des catégories", e);
             }
         }
         return categories;
@@ -75,30 +115,60 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
      * @throws DALException
      */
     @Override
-    public Categorie getCategorieByNo(int noCategorie) throws DALException {
-        try (PreparedStatement statement = connection.prepareStatement(GET_CATEGORIE_BY_NO)) {
+    public Categorie getCategorieById(int noCategorie) throws DALException {
+        ResultSet resultSet = null;
+        Categorie categorie = null;
+
+        try (PreparedStatement statement = connection.prepareStatement(GET_CATEGORIE_BY_ID)) {
             statement.setInt(1, noCategorie);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 String libelle = resultSet.getString("libelle");
-                Categorie categorie = new Categorie(noCategorie, libelle);
-                return categorie;
+                categorie = new Categorie(libelle);
+            }
+        } catch (SQLException e) {
+            throw new DALException("Erreur lors de la récupération de la catégorie", e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                throw new DALException("Erreur lors de la récupération de la catégorie", e);
             }
         }
-        return null;
+        return categorie;
     }
 
     /**
      * Method in charge of updating a category in the database
-     * @param categorie Categorie
+     * @param id int
+     * @param libelle String
      * @throws DALException
      */
     @Override
-    public void updateCategorie(Categorie categorie) throws DALException {
-        try (PreparedStatement statement = connection.prepareStatement(UPDATE_CATEGORIE)) {
-            statement.setString(1, categorie.getLibelle());
-            statement.setInt(2, categorie.getNoCategorie());
+    public void updateCategorieById(int id, String libelle) throws DALException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = JdbcTools.getConnection();
+            statement = connection.prepareStatement(UPDATE_CATEGORIE);
+            statement.setString(1, libelle);
+            statement.setInt(2, id);
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DALException("Erreur lors de la modification de la catégorie", e);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new DALException("Erreur lors de la modification de la catégorie", e);
+            }
         }
     }
 
@@ -106,12 +176,30 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
      * Method in charge of deleting a category from the database
      * @param noCategorie int
      * @throws DALException
+     * @throws SQLException
      */
     @Override
-    public void deleteCategorie(int noCategorie) throws DALException {
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_CATEGORIE)) {
-            statement.setInt(1, noCategorie.getNoCategorie());
+    public void deleteCategorieById(int noCategorie) throws DALException, SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = JdbcTools.getConnection();
+            statement = connection.prepareStatement(DELETE_CATEGORIE);
+            statement.setInt(1, noCategorie);
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DALException("Erreur lors de la suppression de la catégorie", e);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new DALException("Erreur lors de la suppression de la catégorie", e);
+            }
         }
     }
 }

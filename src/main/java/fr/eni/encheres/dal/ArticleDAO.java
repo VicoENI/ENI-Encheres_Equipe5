@@ -36,13 +36,13 @@ public interface ArticleDAO {
      * @param article Article
      * @throws DALException
      */
-    void updateArticle(Article article) throws DALException;
+    void updateArticleById(Article article) throws DALException;
 
     /**
-     * Methode in charge of deleting an article from the database
-     * @param article Article
+     * Methode in charge of deleting an article from the database by its id
+     * @param id int
      * @throws DALException
      */
-    void deleteArticle(Article article) throws DALException;
+    void deleteArticleById(int id) throws DALException;
 }
 

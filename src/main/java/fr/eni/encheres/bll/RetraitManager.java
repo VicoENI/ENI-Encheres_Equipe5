@@ -5,6 +5,7 @@ import java.util.List;
 
 import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.dal.RetraitDAO;
+import fr.eni.encheres.dal.jdbc.RetraitDAOJdbcImpl;
 import fr.eni.encheres.exceptions.BLLException;
 
 /**
@@ -27,12 +28,12 @@ public class RetraitManager {
 	 */
 	public RetraitManager() throws BLLException {
 			//Instancier le Data Access Object
-		daoRetraits =DAOFactory.getRetraitDAO();
+		daoRetraits = (RetraitDAO) new RetraitDAOJdbcImpl();
 		
 		//Charger la liste des catégories
 		try {
-			listRetraits = daoRetraits.selectAll();
-		} catch (BLLException e) {
+			listRetraits = daoRetraits.getAllRetraits();
+		} catch (Exception e) {
 			throw new BLLException("Echec du chargement du listRetraits - ", e);
 		}
 	}
@@ -54,16 +55,15 @@ public class RetraitManager {
 	public int addRetrait(Retrait newRetrait) throws BLLException {
 		Retrait retrait;
 		try {
-			retrait = daoRetraits.selectById(newRetrait);
-		} catch (BLLException e) {
+			retrait = daoRetraits.selectRetraitById(newRetrait.getId());
+		} catch (Exception e) {
 			throw new BLLException("Echec selectById dans addRetrait", e);
 		}
 		if (retrait!= null){
 			throw new BLLException("retrait deja existante.");
 		}
 		try {
-			validerRetrait(newRetrait);
-			daoRetraits.insert(newRetrait);
+			daoRetraits.createRetrait(newRetrait);
 			listRetraits.add(newRetrait);
 		} catch (BLLException e) {
 			throw new BLLException("Echec addRetrait", e);
@@ -76,20 +76,19 @@ public class RetraitManager {
 	 * @param retrait Retrait
 	 * @throws BLLException
 	 */
-	public void updateRetrait(Retrait retrait) throws BLLException {
+	public void updateRetraitById(Retrait retrait) throws BLLException {
 		Retrait existingRetrait;
 		try {
-			existingRetrait = daoRetraits.selectById(retrait.getIdRetrait());
-		} catch (BLLException e) {
+			existingRetrait = daoRetraits.selectRetraitById(retrait.getId());
+		} catch (Exception e) {
 			throw new BLLException("Echec selectById dans updateCategorie", e);
 		}
 		if (existingRetrait==null){
 			throw new BLLException("retrait inexistant.");
 		}
-		retrait.setIdRetrait(existingRetrait.getIdRetrait());
+		retrait.setId(existingRetrait.getId());
 		try {
-			validerRetrait(retrait);
-			daoRetraits.update(retrait);
+			daoRetraits.updateRetrait(retrait);
 			
 		} catch (BLLException e) {
 			throw new BLLException("Echec updateRetrait -retrait:"+retrait, e);
@@ -112,9 +111,9 @@ public class RetraitManager {
 	 */
 	public void removeRetrait(int index) throws BLLException {
 		try {
-			daoRetraits.delete(listRetraits.get(index).getIdRetrait());
+			daoRetraits.deleteRetrait(listRetraits.get(index).getId());
 			listRetraits.remove(index);
-		} catch (BLLException e) {
+		} catch (Exception e) {
 			throw new BLLException("Echec de la suppression du retrait - ", e);
 		}
 		
