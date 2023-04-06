@@ -1,4 +1,4 @@
-package fr.eni.encheres.dal.jdbc;
+ package fr.eni.encheres.dal.jdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +10,10 @@ import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.dal.EnchereDAO;
 import fr.eni.encheres.exceptions.DALException;
 
+import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.bll.UtilisateurManager;
+import fr.eni.encheres.dal.UtilisateurDAO;
+import fr.eni.encheres.dal.jdbc.UtilisateurDAOJdbcImpl;
 /**
  * Class in charge of managing SQL queries for the ENCHERES table
  * @author VicoENI
@@ -23,15 +27,15 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
     private static final String GET_ENCHERE_BY_NO_ARTICLE = "SELECT * FROM ENCHERES WHERE no_article = ?";
     private static final String UPDATE_ENCHERE   = "UPDATE ENCHERES SET no_utilisateur = ?, date_enchere = ?, montant_enchere = ? WHERE no_article = ?";
     private static final String DELETE_ENCHERE   = "DELETE FROM ENCHERES WHERE no_article = ?";
-
+    
+    
     // Objet Connection pour la connexion à la base de données
     private Connection connection;
     
     /**
      * Constructor of the class EnchereDAOJdbcImpl which takes a connection as a parameter
-     * @param connection Connection
      */
-    public EnchereDAOJdbcImpl(Connection connection) {
+    public EnchereDAOJdbcImpl() {
         this.connection = connection;
     }
 
@@ -43,8 +47,8 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
     @Override
     public void createEnchere(Enchere enchere) throws DALException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE_ENCHERE)) {
-            statement.setInt(1, enchere.getNoUtilisateur());
-            statement.setInt(2, enchere.getNoArticle());
+            statement.setUtilisateur(1, enchere.getUtilisateur());
+            statement.setArticleVendu(2, enchere.getArticleVendu());
             statement.setTimestamp(3, new java.sql.Timestamp(enchere.getDateEnchere().getTime()));
             statement.setInt(4, enchere.getMontantEnchere());
             statement.executeUpdate();
@@ -62,11 +66,11 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
         try (PreparedStatement statement = connection.prepareStatement(GET_ALL_ENCHERES)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int noUtilisateur = resultSet.getInt("no_utilisateur");
-                int noArticle = resultSet.getInt("no_article");
+                int noUtilisateur = resultSet.getIdUtilisateur("no_utilisateur");
+                int noArticle = resultSet.getIdArticle("no_article");
                 java.util.Date dateEnchere = new java.util.Date(resultSet.getTimestamp("date_enchere").getTime());
                 int montantEnchere = resultSet.getInt("montant_enchere");
-                Enchere enchere = new Enchere(noUtilisateur, noArticle, dateEnchere, montantEnchere);
+                Enchere enchere = new Enchere(dateEnchere, montantEnchere,noUtilisateur, noArticle);
                 encheres.add(enchere);
             }
         }
@@ -88,7 +92,7 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
                 int noUtilisateur = resultSet.getInt("no_utilisateur");
                 java.util.Date dateEnchere = new java.util.Date(resultSet.getTimestamp("date_enchere").getTime());
                 int montantEnchere = resultSet.getInt("montant_enchere");
-                Enchere enchere = new Enchere(noUtilisateur, noArticle, dateEnchere, montantEnchere);
+                Enchere enchere = new Enchere(dateEnchere, montantEnchere,noUtilisateur, noArticle);
                 encheres.add(enchere);
             }
         }

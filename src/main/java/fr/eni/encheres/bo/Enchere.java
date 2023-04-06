@@ -17,7 +17,7 @@ public class Enchere {
     public Enchere() {}
     
     // Constructeur avec paramètres
-    public Enchere(Date dateEnchere, int montantEnchere, Utilisateur utilisateur, Article articleVendu) {
+    public Enchere(Utilisateur utilisateur, Article articleVendu, Date dateEnchere, int montantEnchere) {
     	
         setDateEnchere(dateEnchere);
         setMontantEnchere(montantEnchere);

@@ -5,7 +5,9 @@ import java.util.List;
 
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.dal.EnchereDAO;
+import fr.eni.encheres.dal.jdbc.EnchereDAOJdbcImpl;
 import fr.eni.encheres.exceptions.BLLException;
+import fr.eni.encheres.exceptions.DALException;
 
 /**
  * Class managing the Enchere.
@@ -24,15 +26,16 @@ public class EnchereManager {
 	/**
 	 * Constructor of the EnchereManager class. Initializes the list of Enchere and the connection to the database.
 	 * @throws BLLException
+	 * @throws DALException
 	 */
-	public EnchereManager() throws BLLException {
+	public EnchereManager() throws BLLException, DALException {
 		//Instancier le Data Access Object
-		daoEncheres =DAOFactory.getEnchereDAO();
+		daoEncheres = (EnchereDAO) new EnchereDAOJdbcImpl();
 	
 		//Charger le listUsers
 		try {
-			listEncheres = daoEncheres.selectAll();
-		} catch (BLLException e) {
+			listEncheres = daoEncheres.getAllEncheres();
+		} catch (Exception e) {
 			throw new BLLException("Echec du chargement du listEnchere - ", e);
 		}
 	}
@@ -49,24 +52,33 @@ public class EnchereManager {
 	 * Update an Enchere in the database
 	 * @param enchere Enchere
 	 * @throws BLLException
+	 * @throws DALException
 	 */
-	public void Enchere(Enchere enchere) throws BLLException {
+	public void Enchere(Enchere enchere) throws BLLException, DALException {
 		Enchere existingEnchere;
-		try {
-			existingEnchere = daoEncheres.selectById(enchere.getIdEnchere());
-		} catch (BLLException e) {
-			throw new BLLException("Echec selectById dans updateEnchere", e);
-		}
+		existingEnchere = daoEncheres.selectById(enchere.getId());
 		if (existingEnchere==null){
 			throw new BLLException("enchere inexistant.");
 		}
-		enchere.setIdEnchere(existingEnchere.getIdEnchere());
+		enchere.setId(existingEnchere.getId());
 		try {
 			validerEnchere(enchere);
 			daoEncheres.update(enchere);
 			
 		} catch (BLLException e) {
 			throw new BLLException("Echec updateEnchere-enchere:"+enchere, e);
+		}
+	}
+
+	// fait pour valider echange. 
+	public void validerEnchere(Enchere enchere) throws BLLException {
+		if (enchere.getMontantEnchere() <= enchere.getArticleVendu().getPrixVente()) {
+			throw new BLLException("Le montant de l'enchère doit être supérieur au prix de vente de l'article !");
+		}
+		try {
+			daoEncheres.update(enchere);
+		} catch (DALException e) {
+			throw new BLLException("Erreur lors de la validation de l'enchère : " + enchere, e);
 		}
 	}
 	
@@ -83,12 +95,14 @@ public class EnchereManager {
 	 * Delete an Enchere in the database
 	 * @param index int
 	 * @throws BLLException
+	 * @throws DALException
 	 */
-	public void removeEnchere(int index) throws BLLException {
+	public void removeEnchere(int index) throws BLLException, DALException {
 		try {
-			daoEncheres.delete(listEncheres.get(index).getIdEnchere());
-			listEncheres.remove(index);
-		} catch (BLLException e) {
+			Enchere enchereToRemove = listEncheres.get(index);
+			daoEncheres.deleteEnchereById(enchereToRemove.getId());
+			listEncheres.remove(enchereToRemove);
+		} catch (DALException e) {
 			throw new BLLException("Echec de la suppression de l'enchere - ", e);
 		}
 		
