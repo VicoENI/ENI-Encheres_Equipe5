@@ -42,6 +42,10 @@
 	    <input type="text" class="form-control" id="inputVille">
 	  </div>
 	  <div class="col-md-6">
+	    <label for="inputPassword4" class="form-label">Mot de passe actuel</label>
+	    <input type="password" class="form-control" id="inputPassword4">
+	  </div>
+	  <div class="col-md-6">
 	    <label for="inputPassword4" class="form-label">Nouveau mot de passe</label>
 	    <input type="password" class="form-control" id="inputPassword4">
 	  </div>
@@ -50,7 +54,7 @@
 	    <input type="password" class="form-control" id="inputPassword4">
 	  </div>
 	  <div class="col-12">
-	    <button type="submit" class="btn btn-primary">Créer</button>
+	    <button type="submit" class="btn btn-primary">Enregistrer</button>
 	    <button type="submit" class="btn btn-primary">Annuler</button>
 	  </div>
 	</form>
